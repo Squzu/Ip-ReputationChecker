@@ -4,10 +4,10 @@ import requests
 app = Flask(__name__)
 
 # VirusTotal API key
-VT_API_KEY = "864ce0b4fa3c17b416a2d375e41c88fb3d89ba79668797f75b2c502fbfe20fbe"
+VT_API_KEY = "<VT API KEY>"
 
 # AbuseIPDB API key
-ABUSEIPDB_API_KEY = "5ee9adb87d5dcf735f7a8bd1d517b24f7a786273fdf5f9ab8dfac148bdd4147dac8d994e31e41bab"
+ABUSEIPDB_API_KEY = "<AbuseDBIP API KEY>"
 
 @app.route("/")
 def index():
