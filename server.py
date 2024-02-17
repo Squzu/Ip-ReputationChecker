@@ -3,11 +3,13 @@ import requests
 
 app = Flask(__name__)
 
-# VirusTotal API key
-VT_API_KEY = "<VT API KEY>"
+# VirusTotal API keys
+VT_API_KEYS = ["your_VT_API_key_1", "your_VT_API_key_2", "your_VT_API_key_3"]
+vt_key_index = 0
 
-# AbuseIPDB API key
-ABUSEIPDB_API_KEY = "<AbuseDBIP API KEY>"
+# AbuseIPDB API keys
+ABUSEIPDB_API_KEYS = ["your_AbuseIPDB_API_key_1", "your_AbuseIPDB_API_key_2", "your_AbuseIPDB_API_key_3"]
+abuseipdb_key_index = 0
 
 @app.route("/")
 def index():
@@ -15,6 +17,8 @@ def index():
 
 @app.route("/lookup")
 def lookup():
+    global vt_key_index, abuseipdb_key_index
+    
     ip_address = request.args.get("ip")
 
     if not ip_address:
@@ -24,7 +28,7 @@ def lookup():
     vt_url = f"https://www.virustotal.com/api/v3/ip_addresses/{ip_address}"
     vt_headers = {
         "accept": "application/json",
-        "x-apikey": VT_API_KEY
+        "x-apikey": VT_API_KEYS[vt_key_index]
     }
     vt_response = requests.get(vt_url, headers=vt_headers)
     vt_data = vt_response.json()
@@ -38,7 +42,7 @@ def lookup():
         "verbose": ""
     }
     abuseipdb_headers = {
-        "Key": ABUSEIPDB_API_KEY,
+        "Key": ABUSEIPDB_API_KEYS[abuseipdb_key_index],
         "Accept": "application/json"
     }
     abuseipdb_response = requests.get(abuseipdb_url, params=abuseipdb_params, headers=abuseipdb_headers)
@@ -46,6 +50,10 @@ def lookup():
     abuseipdb_abuse_confidence_score = abuseipdb_data.get("data", {}).get("abuseConfidenceScore", 0)
     isp = abuseipdb_data.get("data", {}).get("isp", "Unknown")
     country = abuseipdb_data.get("data", {}).get("countryName", "Unknown")
+
+    # Update key indices for next request
+    vt_key_index = (vt_key_index + 1) % len(VT_API_KEYS)
+    abuseipdb_key_index = (abuseipdb_key_index + 1) % len(ABUSEIPDB_API_KEYS)
 
     # Format the output
     output = f"VirusTotal: {vt_malicious_value}/90\n"
