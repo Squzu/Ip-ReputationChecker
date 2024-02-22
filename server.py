@@ -1,3 +1,5 @@
+
+
 from flask import Flask, request, render_template
 import requests
 
@@ -8,7 +10,7 @@ VT_API_KEYS = ["your_VT_API_key_1", "your_VT_API_key_2", "your_VT_API_key_3"]
 vt_key_index = 0
 
 # AbuseIPDB API keys
-ABUSEIPDB_API_KEYS = ["your_AbuseIPDB_API_key_1", "your_AbuseIPDB_API_key_2", "your_AbuseIPDB_API_key_3"]
+ABUSEIPDB_API_KEYS = ["your_AB_API_key_1", "your_AB_API_key_2", "your_AB_API_key_3""]
 abuseipdb_key_index = 0
 
 @app.route("/")
@@ -18,7 +20,7 @@ def index():
 @app.route("/lookup")
 def lookup():
     global vt_key_index, abuseipdb_key_index
-    
+
     ip_address = request.args.get("ip")
 
     if not ip_address:
