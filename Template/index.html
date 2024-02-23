@@ -4,91 +4,103 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IP Checker</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="https://favicon-generator.org/favicon-generator/htdocs/favicons/2024-02-23/420396c1a0c74bbeb7baa65f044a4a87.ico.png">
+    <!-- Other favicon links -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="./favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./favicon/favicon-16x16.png">
+    <link rel="manifest" href="./favicon/site.webmanifest">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-image: url("https://1.bp.blogspot.com/--KaGwQke4RQ/X8kc61_kAzI/AAAAAAAAdDI/1U2nZkxgFSA8TS3RRl6nmSgcqwU8bR7GQCLcBGAsYHQ/s1600/V2-12032020MINIMAL-LAKE-DESKTOP-WALLPAPER-hd.png");
-            background-size: cover; /* Scale the background image to cover the entire viewport */
+            background-image: url("https://r4.wallpaperflare.com/wallpaper/163/392/912/map-wold-map-technology-world-wallpaper-d8c6edc810508cc8901c51ae183254ea.jpg");
+            background-size: cover;
             background-repeat: no-repeat;
-            background-position: center; /* Center the background image horizontally and vertically */
-            background-attachment: fixed; /* Ensure the background image remains fixed in the viewport */
-            color: #333;
+            color: #000;
             margin: 0;
             padding: 0;
         }
-
         .container {
             max-width: 800px;
             margin: 50px auto;
             padding: 20px;
-            background-color: rgba(255, 255, 255, 0.8);
+            background-color: rgba(255, 255, 255, 0.5);
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-
         h1 {
-            color: #007bff;
             text-align: center;
+            font-size: 3em;
+            color: #000;
+            text-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+            font-weight: bold;
+            font-style: italic;
+            letter-spacing: 2px;
         }
-
         form {
             text-align: center;
             margin-top: 20px;
         }
-
         label {
             font-weight: bold;
-            color: #007bff;
+            color: #000;
         }
-
         input[type="text"] {
             padding: 8px;
-            border: 1px solid #ccc;
+            border: 1px solid #000;
             border-radius: 4px;
             width: 200px;
         }
-
         button {
-            background-color: #007bff;
-            color: white;
+            background-color: #000;
+            color: #fff;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
             border-radius: 4px;
         }
-
         button:hover {
-            background-color: #0056b3;
+            background-color: #333;
         }
-
         .results-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-gap: 20px;
             margin-top: 20px;
         }
-
         .results-box {
-            background-color: #f9f9f9;
+            background-color: rgba(255, 255, 255, 0.8);
             padding: 20px;
             border-radius: 8px;
             border: 1px solid #ccc;
+            margin-bottom: 20px;
+        }
+        .loading {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+        }
+        .loading img {
+            width: 100px;
+            height: 100px;
         }
     </style>
 </head>
 <body>
 <div class="container">
-    <h1>IP Checker</h1>
+    <h1><span style="color:#fff;">IP</span> Checker</h1>
     <form id="ipForm">
         <label for="ip">Enter IP Address:</label>
         <input type="text" id="ip" name="ip" required>
         <button type="submit">Lookup</button>
     </form>
-    <div class="results-container">
+    <div class="loading" id="loading">
+        <img src="https://i.gifer.com/XOsX.gif" alt="Loading...">
+    </div>
+    <div class="results-container" id="resultsContainer" style="display:none;">
         <div id="ipBox" class="results-box"></div>
+        <div id="summaryBox" class="results-box"></div>
         <div id="vtBox" class="results-box"></div>
         <div id="abuseIPDBBox" class="results-box"></div>
-        <div id="summaryBox" class="results-box"></div>
     </div>
 </div>
 <script>
@@ -98,18 +110,33 @@
 
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "/lookup?ip=" + ip, true);
+
+        // Show loading indicator and hide results
+        document.getElementById("loading").style.display = "block";
+        document.getElementById("resultsContainer").style.display = "none";
+
         xhr.onreadystatechange = function () {
             if (xhr.readyState == 4) {
-                console.log(xhr.status);
-                console.log(xhr.responseText);
+                // Hide loading indicator
+                document.getElementById("loading").style.display = "none";
 
                 if (xhr.status == 200) {
+                    // Show results container
+                    document.getElementById("resultsContainer").style.display = "block";
+
                     var response = xhr.responseText.split('\n');
 
                     // IP Text
                     document.getElementById("ipBox").innerHTML = "<h2>IP Details:</h2><p>IP: " + ip + "</p>";
                     document.getElementById("ipBox").innerHTML += "<p>ISP: " + response[2].split(': ')[1] + "</p>";
                     document.getElementById("ipBox").innerHTML += "<p>Country: " + response[3].split(': ')[1] + "</p>";
+
+                    // Summary Box
+                    var vtInfo = response[0].trim().split(' ')[1];
+                    var abuseIPDBInfo = response[1].trim().split(' ')[2];
+                    var summary = "<h2>Summary:</h2>";
+                    summary += "<p>" + vtInfo + " at VT & Abuse is " + abuseIPDBInfo + "</p>";
+                    document.getElementById("summaryBox").innerHTML = summary;
 
                     // VirusTotal Box
                     document.getElementById("vtBox").innerHTML = "<h2>VirusTotal Details:</h2><p>" + response[0] + "</p>";
@@ -118,21 +145,14 @@
                     // AbuseIPDB Box
                     document.getElementById("abuseIPDBBox").innerHTML = "<h2>AbuseIPDB Details:</h2><p>" + response[1] + "</p>";
                     document.getElementById("abuseIPDBBox").innerHTML += "<p>API call to AbuseIPDB was successful.</p>";
-
-                    // Summary Box
-                    var vtInfo = response[0].trim().split(' ')[1];
-                    var abuseIPDBInfo = response[1].trim().split(' ')[2];
-                    var summary = "<h2>Summary:</h2>";
-                    summary += "<p>" + vtInfo + " at VT & Abuse is " + abuseIPDBInfo + "</p>";
-                    document.getElementById("summaryBox").innerHTML = summary;
                 } else {
-                    document.getElementById("summaryBox").innerHTML = "<p>Failed to fetch data. Please try again later.</p>";
+                    // Show error message
+                    document.getElementById("ipBox").innerHTML = "<p>Failed to fetch data. Please try again later.</p>";
                 }
             }
         };
         xhr.send();
     });
 </script>
-
 </body>
 </html>
