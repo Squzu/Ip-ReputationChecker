@@ -30,9 +30,10 @@ IP Checker is a simple web application built with Flask that allows users to che
 
 Contributions are welcome! Fork the repository, make your changes, and submit a pull request.
 ## Screenshots
-![image](https://github.com/Squzu/Ip-ReputationChecker/assets/94438634/262251bc-2311-4087-b653-d32dafcf8b6a)
+![image](https://github.com/Squzu/Ip-ReputationChecker/assets/94438634/690098c4-c376-4992-ad1a-0fb5a9124a7d)
 
-![image](https://github.com/Squzu/Ip-ReputationChecker/assets/94438634/a5fb11a2-3eb2-4ac2-850a-7ff0bef22496)
+![image](https://github.com/Squzu/Ip-ReputationChecker/assets/94438634/9c147d28-9a95-419f-b176-34ff568ed8ac)
+
 
 ## License
 
