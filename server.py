@@ -1,16 +1,14 @@
-
-
 from flask import Flask, request, render_template
 import requests
 
 app = Flask(__name__)
 
 # VirusTotal API keys
-VT_API_KEYS = ["your_VT_API_key_1", "your_VT_API_key_2", "your_VT_API_key_3"]
+VT_API_KEYS = ["<VT_API_KEY_1>", "<VT_API_KEY_2>"]
 vt_key_index = 0
 
 # AbuseIPDB API keys
-ABUSEIPDB_API_KEYS = ["your_AB_API_key_1", "your_AB_API_key_2", "your_AB_API_key_3""]
+ABUSEIPDB_API_KEYS = ["<ABUSEIPDB_API_KEY_1>", "<ABUSEIPDB_API_KEY_1>"]
 abuseipdb_key_index = 0
 
 @app.route("/")
